@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from threading import Thread
 import time
 import numpy as np
 import cv2
@@ -80,18 +81,20 @@ def main_function():
             config.HOLD = True
             fishing_repo.set_limit()
 
-        key = cv2.waitKey(0)
+        key = cv2.waitKey(25)
         # Press "R" button to Reset
-        if key == ord('r'):
+        if key & 0xFF == ord('r'):
             fishing_repo.set_limit()
         # Press "H" button to Hold
-        if key == ord('h'):
+        if key & 0xFF == ord('h'):
             config.HOLD ^= True
         # Press "Q" button to exit program
-        if key == ord('q'):
+        if key & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             break
 
 
 if __name__ == "__main__":
-    main_function()
+    thread = Thread(target=main_function)
+    thread.start()
+    thread.join()
