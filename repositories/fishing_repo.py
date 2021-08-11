@@ -39,6 +39,8 @@ def render_tracking_info(curTime):
 
 
 def render_center_point():
+    cv2.circle(config.FRAME, (0 + int(config.BOUNDING_BOX['width'] / 2), 0 + int(
+        config.BOUNDING_BOX['height'] / 2)), 80, (255, 255, 255), thickness=1, lineType=8, shift=0)
     cv2.rectangle(config.FRAME, (0 + int(config.BOUNDING_BOX['width'] / 2), 0 + int(config.BOUNDING_BOX['height'] / 2)),
                   (0 + int(config.BOUNDING_BOX['width'] / 2),
                    0 + int(config.BOUNDING_BOX['height'] / 2)),
