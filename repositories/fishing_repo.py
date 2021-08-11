@@ -4,6 +4,18 @@ import pyautogui
 import config
 
 
+def set_limit():
+    try:
+        config.LIMIT = int(
+            input("Number of times fishing\n(default -1 for Unlimit): ") or "-1")
+    except ValueError:
+        print("Invalid number, set to unlimited.")
+        config.LIMIT = -1
+    config.LOOP = config.LIMIT
+    config.COUNT = 0
+    print("Running...\n")
+
+
 def render_tracking_info(curTime):
     # Initialize FPS variables
     sec = curTime - config.PREV_TIME

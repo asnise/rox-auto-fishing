@@ -17,10 +17,6 @@ print("Press 'R' button to reset limit.")
 print("Press 'H' button to toggle fishing.")
 print("Press 'Q' button to exit program.\n")
 
-# Get loop number
-config.LOOP = int(input("Number of times fishing\n(default -1 for Unlimit): ") or "-1")
-print("Running...\n")
-
 
 def main_function():
     while True:
@@ -82,14 +78,12 @@ def main_function():
         # Reset
         if config.LOOP == 0:
             config.HOLD = True
-            config.LOOP = int(input("Number of times fishing\n(default -1 for Unlimit): ") or "-1")
-            print("Running...\n")
+            fishing_repo.set_limit()
 
         key = cv2.waitKey(25)
         # Press "R" button to Reset
         if key & 0xFF == ord('r'):
-            config.LOOP = int(input("Number of times fishing\n(default -1 for Unlimit): ") or "-1")
-            print("Running...\n")
+            fishing_repo.set_limit()
         # Press "H" button to Hold
         if key & 0xFF == ord('h'):
             config.HOLD ^= True
