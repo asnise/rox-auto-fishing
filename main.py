@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
+import psutil
+import ctypes
 from threading import Thread
 import time
 import numpy as np
@@ -12,8 +14,12 @@ from repositories import detector_repo
 from repositories import fishing_repo
 from repositories import render_repo
 
+config.PID = os.getpid()
 sct = mss()
 
+# Set title
+title = "RO:X Next Generation - Auto Fishing version " + str(config.VERSION)
+ctypes.windll.kernel32.SetConsoleTitleW(title)
 # Clear console
 os.system('cls' if os.name in ('nt', 'dos') else 'clear')
 

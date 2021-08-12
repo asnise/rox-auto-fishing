@@ -1,5 +1,6 @@
 # Initialize Global Variables
 VERSION = '1.3'
+PID = ''
 IS_ACTIVE = False
 HOLD = True
 
