@@ -60,4 +60,4 @@ def show(detector):
 
     # Rendering
     cv2.imshow('RO:X - Auto Fishing v%s' % config.VERSION,
-               np.hstack([config.FRAME, detector["green"]]))
+               np.hstack([config.FRAME]))
