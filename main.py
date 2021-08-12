@@ -1,86 +1,40 @@
 # -*- coding: utf-8 -*-
+import os
 from threading import Thread
 import time
 import numpy as np
 import cv2
 from mss import mss
-from PIL import Image
-import pyautogui
+from win32api import GetSystemMetrics
 
 import config
+from repositories import detector_repo
 from repositories import fishing_repo
+from repositories import render_repo
 
 sct = mss()
 
-print("version %s" % config.VERSION)
+# Clear console
+os.system('cls' if os.name in ('nt', 'dos') else 'clear')
+
+print("RO:X Next Generation - Auto Fishing version %s" % config.VERSION)
 print("Made by Thanapat Maliphan. (fb.com/thanatos1995)\n")
-print("Press 'R' button to reset limit.")
+
+print("Screen resolution")
+print("width = ", GetSystemMetrics(0))
+print("height = ", GetSystemMetrics(1))
+
+print("\nPress 'R' button to reset limit.")
 print("Press 'H' button to toggle fishing.")
 print("Press 'Q' button to exit program.\n")
 
 
 def main_function():
     while True:
-        # เวลาปัจจุบัน
-        config.CURRENT_TIME = time.time()
-
-        # take a screenshot of the screen and store it in memory, then
-        # convert the PIL/Pillow image to an OpenCV compatible NumPy array
-        # and finally write the image to disk
-        config.FRAME = pyautogui.screenshot()
-
-        # Crop
-        sct.get_pixels(config.BOUNDING_BOX)
-        config.FRAME = Image.frombytes(
-            'RGB', (sct.width, sct.height), sct.image)
-
-        # แปลงสีภาพ
-        config.FRAME = cv2.cvtColor(
-            np.array(config.FRAME), cv2.COLOR_BGR2RGB)
-        hsv_frame = cv2.cvtColor(config.FRAME, cv2.COLOR_BGR2HSV)
-
-        # Green color
-        low_green = np.array([40, 135, 70])
-        high_green = np.array([50, 255, 255])
-        mask1 = cv2.inRange(hsv_frame, low_green, high_green)
-        mask2 = cv2.inRange(hsv_frame, low_green, high_green)
-        mask = cv2.bitwise_or(mask1, mask2)
-        green = cv2.bitwise_and(config.FRAME, config.FRAME, mask=mask)
-
-        # แสดงรายละเอียดบนจอ
-        fishing_repo.render_tracking_info(config.CURRENT_TIME)
-
-        # Center point
-        fishing_repo.render_center_point()
-
-        # Render
-        cv2.imshow('RO:X - Auto Fishing v%s' % config.VERSION,
-                   np.hstack([config.FRAME]))
-
-        # ระยะเวลาที่ห่างจากการคลิกครั้งล่าสุด
-        last_click_sec = config.CURRENT_TIME - config.LAST_CLICK_TIME
-
-        # ตรวจจับพื้นที่สีเขียวq
-        if not config.HOLD and config.LOOP != 0:
-            if cv2.countNonZero(mask) > 0:  # เขียวแล้ว
-                if config.IS_FISHING and last_click_sec > 2:  # รออย่างน้อย 2 วินาที เพื่อกดใหม่
-                    print('Gotcha!')
-                    fishing_repo.mouse_click()
-                    config.COUNT += 1
-                    if config.LOOP > 0:
-                        config.LOOP -= 1
-                    config.IS_FISHING = False
-            else:   # ยังไม่เขียว
-                if not config.IS_FISHING and last_click_sec > 4 and config.COUNT > 0:  # รอโยนเบ็ดครั้งถัดไปในอีก 4 วินาที
-                    print("Fishing!, throw the fishing rod.")
-                    fishing_repo.mouse_click()
-                    # เข้าสู่สถานะกำลังตกปลา
-                    config.IS_FISHING = True
-        # Reset
-        if config.LOOP == 0:
-            config.HOLD = True
+        # Reset when reaching the limit
+        if config.COUNT - config.LIMIT == 0:
             fishing_repo.set_limit()
-
+        # ดักปุ่มกด
         key = cv2.waitKey(25)
         # Press "R" button to Reset
         if key & 0xFF == ord('r'):
@@ -92,6 +46,35 @@ def main_function():
         if key & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             break
+
+        # เวลาปัจจุบัน
+        config.CURRENT_TIME = time.time()
+
+        # Crop
+        render_repo.crop_screenshot(sct=sct)
+
+        # แปลงสีภาพ
+        config.FRAME = cv2.cvtColor(
+            np.array(config.FRAME), cv2.COLOR_BGR2RGB)
+        hsv_frame = cv2.cvtColor(config.FRAME, cv2.COLOR_BGR2HSV)
+
+        # Detect green color
+        detector = detector_repo.detect_green_color(hsv_frame=hsv_frame)
+
+        # Render window
+        render_repo.show(detector=detector)
+
+        # ระยะเวลาที่ห่างจากการคลิกครั้งล่าสุด
+        last_click_sec = config.CURRENT_TIME - config.LAST_CLICK_TIME
+
+        # ตรวจจับพื้นที่สีเขียว
+        if not config.HOLD and config.LOOP != 0:
+            if cv2.countNonZero(detector["mask"]) > 0:  # เขียวแล้ว
+                if config.IS_FISHING and last_click_sec > 2:  # รออย่างน้อย 2 วินาที เพื่อกดใหม่
+                    fishing_repo.gotcha()
+            else:   # ยังไม่เขียว
+                if not config.IS_FISHING and last_click_sec > 5 and config.COUNT > 0:  # รอโยนเบ็ดครั้งถัดไปในอีก 5 วินาที
+                    fishing_repo.throw_fishing_rod()
 
 
 if __name__ == "__main__":
