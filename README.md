@@ -1,4 +1,4 @@
-![Untitled](https://user-images.githubusercontent.com/5137066/129112825-a961cb26-a516-4c90-a066-5efc50ffed4f.png)
+![Untitled](https://user-images.githubusercontent.com/5137066/129257843-1888956f-ae4f-48ad-8844-d29ab8911ea8.png)
 
 # Credit: Thanapat Maliphan
 Facebook: www.facebook.com/thanatos1995
