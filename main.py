@@ -73,7 +73,7 @@ def main_function():
                 if config.IS_FISHING and last_click_sec > 2:  # รออย่างน้อย 2 วินาที เพื่อกดใหม่
                     fishing_repo.gotcha()
             else:   # ยังไม่เขียว
-                if not config.IS_FISHING and last_click_sec > 5 and config.COUNT > 0:  # รอโยนเบ็ดครั้งถัดไปในอีก 5 วินาที
+                if not config.IS_FISHING and last_click_sec > 4 and config.COUNT > 0:  # รอโยนเบ็ดครั้งถัดไปในอีก 4 วินาที
                     fishing_repo.throw_fishing_rod()
 
 
