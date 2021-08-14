@@ -59,7 +59,7 @@ def show(detector):
     memoryUse = str("{:.2f}".format(
         python_process.memory_info().rss / 1024 ** 2))
     # Set title
-    title = "RO:X Next Generation - Auto Fishing version " + str(config.VERSION) + " - Status: " + str("Fishing" if not config.HOLD else "Stop") + ", Limit: " + str(
+    title = config.TITLE + " " + str(config.VERSION) + " - Status: " + str("Fishing" if not config.HOLD else "Stop") + ", Limit: " + str(
         config.LIMIT) + ", Count: " + str(config.COUNT) + " | MemoryUse: " + memoryUse + " MB"
     ctypes.windll.kernel32.SetConsoleTitleW(title)
     # แสดงรายละเอียดบนจอ

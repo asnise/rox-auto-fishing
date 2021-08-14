@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-import psutil
 import ctypes
 from threading import Thread
 import time
@@ -15,11 +14,12 @@ from repositories import fishing_repo
 from repositories import render_repo
 
 config.PID = os.getpid()
-sct = mss()
+config.SCREEN_WIDTH = int(GetSystemMetrics(0))
+config.SCREEN_HEIGHT = int(GetSystemMetrics(1))
 
-# Set title
-title = "RO:X Next Generation - Auto Fishing version " + str(config.VERSION)
-ctypes.windll.kernel32.SetConsoleTitleW(title)
+sct = mss()
+ctypes.windll.kernel32.SetConsoleTitleW(
+    config.TITLE + ' ' + str(config.VERSION))
 # Clear console
 os.system('cls' if os.name in ('nt', 'dos') else 'clear')
 
@@ -27,8 +27,6 @@ print("RO:X Next Generation - Auto Fishing version %s" % config.VERSION)
 print("Made by Thanapat Maliphan. (fb.com/thanatos1995)\n")
 
 print("Screen resolution")
-config.SCREEN_WIDTH = int(GetSystemMetrics(0))
-config.SCREEN_HEIGHT = int(GetSystemMetrics(1))
 print("width = ", config.SCREEN_WIDTH)
 print("height = ", config.SCREEN_HEIGHT)
 

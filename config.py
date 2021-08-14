@@ -1,5 +1,6 @@
 # Initialize Global Variables
-VERSION = '1.3'
+VERSION = '1.4'
+TITLE = 'RO:X Next Generation - Auto Fishing version'
 PID = ''
 SCREEN_WIDTH = 0
 SCREEN_HEIGHT = 0

@@ -11,18 +11,18 @@ def set_limit():
     config.HOLD = True
     try:
         config.LIMIT = int(
-            input("\nNumber of times fishing\n(default -1 for Unlimit): ") or "-1")
+            input("\nNumber of times fishing\n(-1 for Unlimit): ") or "-1")
     except ValueError:
-        print("Invalid number, set to unlimited.")
+        print("Invalid number, set to unlimit.")
         config.LIMIT = -1
     config.LOOP = config.LIMIT
     # เริ่มนับใหม่
     config.COUNT = 0
-    print("Running...\n")
+    print("[SYSTEM] Running...\n")
 
 
 def action_click():
-    print("Event: mouse left click!")
+    print("[EVENT] Mouse left click!")
     config.LAST_CLICK_TIME = config.CURRENT_TIME
     pyautogui.click(config.CENTER_X, config.CENTER_Y)
 
