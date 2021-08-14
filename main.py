@@ -27,8 +27,10 @@ print("RO:X Next Generation - Auto Fishing version %s" % config.VERSION)
 print("Made by Thanapat Maliphan. (fb.com/thanatos1995)\n")
 
 print("Screen resolution")
-print("width = ", GetSystemMetrics(0))
-print("height = ", GetSystemMetrics(1))
+config.SCREEN_WIDTH = int(GetSystemMetrics(0))
+config.SCREEN_HEIGHT = int(GetSystemMetrics(1))
+print("width = ", config.SCREEN_WIDTH)
+print("height = ", config.SCREEN_HEIGHT)
 
 print("\nPress 'R' button to reset limit.")
 print("Press 'H' button to toggle fishing.")

@@ -3,7 +3,6 @@ import ctypes
 import cv2
 import numpy as np
 from PIL import Image
-from win32api import GetSystemMetrics
 
 import config
 
@@ -41,8 +40,8 @@ def center_point():
 
 def crop_screenshot(sct):
     config.BOUNDING_BOX = {
-        'left': int((75.52 * int(GetSystemMetrics(0))) / 100),
-        'top': int((60.2 * int(GetSystemMetrics(1))) / 100),
+        'left': int((75.52 * int(config.SCREEN_WIDTH)) / 100),
+        'top': int((60.2 * int(config.SCREEN_HEIGHT)) / 100),
         'width': 240,
         'height': 250
     }
